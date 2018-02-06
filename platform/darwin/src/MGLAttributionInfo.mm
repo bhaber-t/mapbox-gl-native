@@ -70,7 +70,7 @@
                                                                                documentAttributes:nil];
 #endif
 
-    NSMutableArray *infos = [NSMutableArray array];
+    __block NSMutableArray *infos = [NSMutableArray array];
     [attributedString enumerateAttribute:NSLinkAttributeName
                                  inRange:attributedString.mgl_wholeRange
                                  options:0
