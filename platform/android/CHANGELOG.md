@@ -5,7 +5,7 @@ Mapbox welcomes participation and contributions from everyone.  If you'd like to
 ## 5.4.0 - January 30, 2018
  - Blacklist Adreno 2xx GPU for VAO support [#11047](https://github.com/mapbox/mapbox-gl-native/pull/11047)
  - Bearing tracking mode GPS_NORTH_FACING [#11095](https://github.com/mapbox/mapbox-gl-native/pull/11095)
- - Disable logging missing location permissons [#11084](https://github.com/mapbox/mapbox-gl-native/pull/11084)
+ - Disable logging for missing location permissions when location is disabled [#11084](https://github.com/mapbox/mapbox-gl-native/pull/11084)
  - Create offline handler using the main thread looper [#11021](https://github.com/mapbox/mapbox-gl-native/pull/11021)
 
 ## 6.0.0-beta.1 - January 26, 2018
