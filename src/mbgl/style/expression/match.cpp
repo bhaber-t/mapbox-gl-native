@@ -40,6 +40,20 @@ std::vector<optional<Value>> Match<T>::possibleOutputs() const {
     return result;
 }
 
+template <typename T>
+mbgl::Value Match<T>::serialize() const {
+    static const std::string match = "match";
+    std::vector<mbgl::Value> serialized;
+    serialized.emplace_back(match);
+    serialized.emplace_back(input->serialize());
+    for (auto& entry : branches) {
+        serialized.emplace_back(entry.first);
+        serialized.emplace_back(entry.second->serialize());
+    };
+    serialized.emplace_back(otherwise->serialize());
+    return serialized;
+}
+    
 
 template<> EvaluationResult Match<std::string>::evaluate(const EvaluationContext& params) const {
     const EvaluationResult inputValue = input->evaluate(params);

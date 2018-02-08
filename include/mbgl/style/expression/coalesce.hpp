@@ -38,6 +38,7 @@ public:
         return args.at(i).get();
     }
     
+    const char* getOperator() const override { return "coalesce"; }
 private:
     Args args;
 };

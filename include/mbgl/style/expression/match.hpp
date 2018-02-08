@@ -32,7 +32,9 @@ public:
     bool operator==(const Expression& e) const override;
 
     std::vector<optional<Value>> possibleOutputs() const override;
-
+    
+    mbgl::Value serialize() const override;
+    const char* getOperator() const override { return "match"; }
 private:
     std::unique_ptr<Expression> input;
     Branches branches;

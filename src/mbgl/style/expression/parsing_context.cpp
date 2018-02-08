@@ -179,15 +179,18 @@ ParseResult ParsingContext::parse(const Convertible& value, TypeAnnotationOption
         }
         
         const type::Type type = (*parsed)->getType();
+        // We have to serialize ahead of time since we're about to collapse the expression
+        const mbgl::Value serialized = (*parsed)->serialize();
         if (type.is<type::Array>()) {
             // keep the original expression's array type, even if the evaluated
             // type is more specific.
             return ParseResult(std::make_unique<Literal>(
                   type.get<type::Array>(),
-                  evaluated->get<std::vector<Value>>())
+                  evaluated->get<std::vector<Value>>(),
+                  serialized)
             );
         } else {
-            return ParseResult(std::make_unique<Literal>(*evaluated));
+            return ParseResult(std::make_unique<Literal>(*evaluated, serialized));
         }
     }
 

@@ -103,6 +103,31 @@ Value ValueConverter<mbgl::Value>::toExpressionValue(const mbgl::Value& value) {
     return mbgl::Value::visit(value, FromMBGLValue());
 }
 
+mbgl::Value ValueConverter<mbgl::Value>::fromExpressionValue(const Value& value) {
+    return value.match(
+        [&](const Color& c)->mbgl::Value {
+            return std::vector<mbgl::Value>{double(c.r), double(c.g), double(c.b), double(c.a)};
+        },
+        [&](const std::vector<Value>& values)->mbgl::Value {
+            std::vector<mbgl::Value> converted;
+            converted.reserve(values.size());
+            for (const Value& v : values) {
+                converted.emplace_back(fromExpressionValue(v));
+            }
+            return converted;
+        },
+        [&](const std::unordered_map<std::string, Value>& values)->mbgl::Value {
+            std::unordered_map<std::string, mbgl::Value> converted;
+            converted.reserve(values.size());
+            for(const auto& entry : values) {
+                converted.emplace(entry.first, fromExpressionValue(entry.second));
+            }
+            return converted;
+        },
+        [&](const auto& a)->mbgl::Value { return a; }
+    );
+}
+
 Value ValueConverter<float>::toExpressionValue(const float value) {
     return static_cast<double>(value);
 }
@@ -237,7 +262,7 @@ template <> type::Type valueTypeToExpressionType<type::ErrorType>() { return typ
 
 
 template Value toExpressionValue(const mbgl::Value&);
-
+template optional<mbgl::Value> fromExpressionValue<mbgl::Value>(const Value&);
 
 // for to_rgba expression
 template type::Type valueTypeToExpressionType<std::array<double, 4>>();

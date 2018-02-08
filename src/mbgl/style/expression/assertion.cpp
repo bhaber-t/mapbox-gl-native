@@ -35,6 +35,23 @@ ParseResult Assertion::parse(const Convertible& value, ParsingContext& ctx) {
     return ParseResult(std::make_unique<Assertion>(it->second, std::move(parsed)));
 }
 
+const char* Assertion::getOperator() const {
+    // TODO: Should we strip assertions entirely from serialization?
+    type::Type t = getType();
+    if (t.is<type::NumberType>()) {
+        return "number";
+    } else if (t.is<type::StringType>()) {
+        return "string";
+    } else if (t.is<type::BooleanType>()) {
+        return "boolean";
+    } else if (t.is<type::ObjectType>()) {
+        return "object";
+    } else {
+        assert(false);
+        return "";
+    }
+}
+
 EvaluationResult Assertion::evaluate(const EvaluationContext& params) const {
     for (std::size_t i = 0; i < inputs.size(); i++) {
         EvaluationResult value = inputs[i]->evaluate(params);

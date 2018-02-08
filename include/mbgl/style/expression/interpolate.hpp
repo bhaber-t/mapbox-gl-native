@@ -185,6 +185,9 @@ public:
         }
         return false;
     }
+    
+    mbgl::Value serialize() const override;
+    const char* getOperator() const override { return "interpolate"; }
 };
 
 } // namespace expression

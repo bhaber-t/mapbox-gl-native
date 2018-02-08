@@ -33,6 +33,8 @@ public:
     std::vector<optional<Value>> possibleOutputs() const override {
         return input->possibleOutputs();
     }
+    
+    const char* getOperator() const override { return "array"; }
 
 private:
     std::unique_ptr<Expression> input;

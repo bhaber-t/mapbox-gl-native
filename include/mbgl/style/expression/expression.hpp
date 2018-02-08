@@ -135,6 +135,17 @@ public:
      * complete set of outputs is statically undecidable.
      */
     virtual std::vector<optional<Value>> possibleOutputs() const = 0;
+    
+    virtual mbgl::Value serialize() const {
+        std::vector<mbgl::Value> serialized;
+        serialized.push_back(std::string(getOperator()));
+        eachChild([&](const Expression &child) {
+            serialized.push_back(child.serialize());
+        });
+        return serialized;
+    };
+    
+    virtual const char* getOperator() const = 0;
 
 protected:
     template <typename T>
