@@ -46,7 +46,7 @@ struct SignatureBase {
         name(std::move(name_))
     {}
     virtual ~SignatureBase() = default;
-    virtual std::unique_ptr<Expression> makeExpression(const std::string& name, std::vector<std::unique_ptr<Expression>>) const = 0;
+    virtual std::unique_ptr<Expression> makeExpression(std::vector<std::unique_ptr<Expression>>) const = 0;
     type::Type result;
     variant<std::vector<type::Type>, VarargsType> params;
     std::string name;
@@ -134,8 +134,7 @@ struct CompoundExpressionRegistry {
 
 ParseResult parseCompoundExpression(const std::string name, const mbgl::style::conversion::Convertible& value, ParsingContext& ctx);
 
-ParseResult createCompoundExpression(const std::string& name,
-                                     const CompoundExpressionRegistry::Definition& definition,
+ParseResult createCompoundExpression(const CompoundExpressionRegistry::Definition& definition,
                                      std::vector<std::unique_ptr<Expression>> args,
                                      ParsingContext& ctx);
     

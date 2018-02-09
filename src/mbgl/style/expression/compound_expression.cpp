@@ -54,11 +54,10 @@ struct Signature<R (Params...)> : SignatureBase {
         return applyImpl(evaluationParameters, args, std::index_sequence_for<Params...>{});
     }
     
-    std::unique_ptr<Expression> makeExpression(const std::string& name_,
-                                               std::vector<std::unique_ptr<Expression>> args) const override {
+    std::unique_ptr<Expression> makeExpression(std::vector<std::unique_ptr<Expression>> args) const override {
         typename Signature::Args argsArray;
         std::copy_n(std::make_move_iterator(args.begin()), sizeof...(Params), argsArray.begin());
-        return std::make_unique<CompoundExpression<Signature>>(name_, *this, std::move(argsArray));
+        return std::make_unique<CompoundExpression<Signature>>(name, *this, std::move(argsArray));
     }
 
     R (*evaluate)(Params...);
@@ -89,8 +88,7 @@ struct Signature<R (const Varargs<T>&)> : SignatureBase {
         evaluate(evaluate_)
     {}
     
-    std::unique_ptr<Expression> makeExpression(const std::string& name,
-                                               std::vector<std::unique_ptr<Expression>> args) const override  {
+    std::unique_ptr<Expression> makeExpression(std::vector<std::unique_ptr<Expression>> args) const override  {
         return std::make_unique<CompoundExpression<Signature>>(name, *this, std::move(args));
     };
     
@@ -125,11 +123,10 @@ struct Signature<R (const EvaluationContext&, Params...)> : SignatureBase {
         evaluate(evaluate_)
     {}
     
-    std::unique_ptr<Expression> makeExpression(const std::string& name_, // TODO: Is this different from what we store locally?
-                                               std::vector<std::unique_ptr<Expression>> args) const override {
+    std::unique_ptr<Expression> makeExpression(std::vector<std::unique_ptr<Expression>> args) const override {
         typename Signature::Args argsArray;
         std::copy_n(std::make_move_iterator(args.begin()), sizeof...(Params), argsArray.begin());
-        return std::make_unique<CompoundExpression<Signature>>(name_, *this, std::move(argsArray));
+        return std::make_unique<CompoundExpression<Signature>>(name, *this, std::move(argsArray));
     }
     
     EvaluationResult apply(const EvaluationContext& evaluationParameters, const Args& args) const {
@@ -463,7 +460,7 @@ ParseResult parseCompoundExpression(const std::string name, const Convertible& v
         }
         args.push_back(std::move(*parsed));
     }
-    return createCompoundExpression(name, definition, std::move(args), ctx);
+    return createCompoundExpression(definition, std::move(args), ctx);
 }
 
 
@@ -471,12 +468,11 @@ ParseResult createCompoundExpression(const std::string& name,
                                      std::vector<std::unique_ptr<Expression>> args,
                                      ParsingContext& ctx)
 {
-    return createCompoundExpression(name, CompoundExpressionRegistry::definitions.at(name), std::move(args), ctx);
+    return createCompoundExpression(CompoundExpressionRegistry::definitions.at(name), std::move(args), ctx);
 }
 
 
-ParseResult createCompoundExpression(const std::string& name,
-                                     const Definition& definition,
+ParseResult createCompoundExpression(const Definition& definition,
                                      std::vector<std::unique_ptr<Expression>> args,
                                      ParsingContext& ctx)
 {
@@ -514,7 +510,7 @@ ParseResult createCompoundExpression(const std::string& name,
         }
         
         if (signatureContext.getErrors().size() == 0) {
-            return ParseResult(signature->makeExpression(name, std::move(args)));
+            return ParseResult(signature->makeExpression(std::move(args)));
         }
     }
     
