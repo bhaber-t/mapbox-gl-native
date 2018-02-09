@@ -34,6 +34,7 @@ public:
         return input->possibleOutputs();
     }
     
+    mbgl::Value serialize() const override;
     std::string getOperator() const override { return "array"; }
 
 private:
