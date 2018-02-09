@@ -34,7 +34,7 @@ public:
         return input->possibleOutputs();
     }
     
-    const char* getOperator() const override { return "array"; }
+    std::string getOperator() const override { return "array"; }
 
 private:
     std::unique_ptr<Expression> input;

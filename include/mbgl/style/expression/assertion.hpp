@@ -27,7 +27,7 @@ public:
 
     std::vector<optional<Value>> possibleOutputs() const override;
     
-    const char* getOperator() const override;
+    std::string getOperator() const override;
 
 private:
     std::vector<std::unique_ptr<Expression>> inputs;

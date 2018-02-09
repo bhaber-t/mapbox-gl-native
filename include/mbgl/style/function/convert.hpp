@@ -49,7 +49,7 @@ public:
         return {};
     }
 
-    const char* getOperator() const override {
+    std::string getOperator() const override {
         return "error";
     }
 private:

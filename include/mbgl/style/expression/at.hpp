@@ -32,7 +32,7 @@ public:
         return { nullopt };
     }
     
-    const char* getOperator() const override { return "at"; }
+    std::string getOperator() const override { return "at"; }
 
 private:
     std::unique_ptr<Expression> index;

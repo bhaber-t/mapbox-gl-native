@@ -169,9 +169,8 @@ ParseResult Step::parse(const mbgl::style::conversion::Convertible& value, Parsi
 }
 
 mbgl::Value Step::serialize() const {
-    static const std::string stepTag = "step";
     std::vector<mbgl::Value> serialized;
-    serialized.emplace_back(stepTag);
+    serialized.emplace_back(getOperator());
     serialized.emplace_back(input->serialize());
     for (auto& entry : stops) {
         if (entry.first > -std::numeric_limits<double>::infinity()) {

@@ -218,23 +218,23 @@ std::vector<optional<Value>> InterpolateBase::possibleOutputs() const {
 
 template <typename T>
 mbgl::Value Interpolate<T>::serialize() const {
-    static const std::string interpolate = "interpolate";
-    static const std::string exponentialTag = "exponential";
-    static const std::string cubicBezierTag = "cubic-bezier";
     std::vector<mbgl::Value> serialized;
-    serialized.emplace_back(interpolate);
-    if (interpolator.is<ExponentialInterpolator>()) {
-        const ExponentialInterpolator& exponential = interpolator.get<ExponentialInterpolator>();
-        // TODO: Could do a separate serialization for "linear", but probably no need?
-        serialized.emplace_back(std::vector<mbgl::Value>{{ exponentialTag, exponential.base }});
-    } else if (interpolator.is<CubicBezierInterpolator>()) {
-        const CubicBezierInterpolator& cubicBezier = interpolator.get<CubicBezierInterpolator>();
-        auto p1 = cubicBezier.ub.getP1();
-        auto p2 = cubicBezier.ub.getP2();
-        serialized.emplace_back(std::vector<mbgl::Value>{{ cubicBezierTag, p1.first, p1.second, p2.first, p2.second }});
-    } else {
-        assert(false);
-    }
+    serialized.emplace_back(getOperator());
+    
+    interpolator.match(
+        [&](const ExponentialInterpolator& exponential) {
+            serialized.emplace_back(std::vector<mbgl::Value>{{ std::string("exponential"), exponential.base }});
+        },
+        [&](const CubicBezierInterpolator& cubicBezier) {
+            static const std::string cubicBezierTag("cubic-bezier");
+            auto p1 = cubicBezier.ub.getP1();
+            auto p2 = cubicBezier.ub.getP2();
+            serialized.emplace_back(std::vector<mbgl::Value>{{ cubicBezierTag, p1.first, p1.second, p2.first, p2.second }});
+        },
+        [&](const auto&) {
+            assert(false);
+        }
+    );
     serialized.emplace_back(input->serialize());
     for (auto& entry : stops) {
         serialized.emplace_back(entry.first);

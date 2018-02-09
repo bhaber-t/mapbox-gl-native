@@ -42,9 +42,8 @@ std::vector<optional<Value>> Match<T>::possibleOutputs() const {
 
 template <typename T>
 mbgl::Value Match<T>::serialize() const {
-    static const std::string match = "match";
     std::vector<mbgl::Value> serialized;
-    serialized.emplace_back(match);
+    serialized.emplace_back(getOperator());
     serialized.emplace_back(input->serialize());
     for (auto& entry : branches) {
         serialized.emplace_back(entry.first);

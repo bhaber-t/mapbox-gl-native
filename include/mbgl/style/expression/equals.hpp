@@ -22,7 +22,7 @@ public:
     std::vector<optional<Value>> possibleOutputs() const override;
 
 
-    const char* getOperator() const override { return "=="; }
+    std::string getOperator() const override { return "=="; }
 private:
     std::unique_ptr<Expression> lhs;
     std::unique_ptr<Expression> rhs;

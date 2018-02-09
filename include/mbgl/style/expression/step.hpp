@@ -39,7 +39,7 @@ public:
     static ParseResult parse(const mbgl::style::conversion::Convertible& value, ParsingContext& ctx);
 
     mbgl::Value serialize() const override;
-    const char* getOperator() const override { return "step"; }
+    std::string getOperator() const override { return "step"; }
 private:
     const std::unique_ptr<Expression> input;
     const std::map<double, std::unique_ptr<Expression>> stops;

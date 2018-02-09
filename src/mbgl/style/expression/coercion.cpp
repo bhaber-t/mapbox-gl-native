@@ -81,16 +81,11 @@ Coercion::Coercion(type::Type type_, std::vector<std::unique_ptr<Expression>> in
     }
 }
 
-const char* Coercion::getOperator() const {
-    type::Type t = getType();
-    if (t.is<type::NumberType>()) {
-        return "to-number";
-    } else if (t.is<type::ColorType>()) {
-        return "to-color";
-    } else {
-        assert(false);
-        return "";
-    }
+std::string Coercion::getOperator() const {
+    return getType().match(
+      [](const type::NumberType&) { return "to-number"; },
+      [](const type::ColorType&) { return "to-color"; },
+      [](const auto&) { assert(false); return ""; });
 }
 
 using namespace mbgl::style::conversion;

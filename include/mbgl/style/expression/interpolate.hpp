@@ -187,7 +187,7 @@ public:
     }
     
     mbgl::Value serialize() const override;
-    const char* getOperator() const override { return "interpolate"; }
+    std::string getOperator() const override { return "interpolate"; }
 };
 
 } // namespace expression

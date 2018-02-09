@@ -66,9 +66,8 @@ ParseResult Let::parse(const Convertible& value, ParsingContext& ctx) {
 }
 
 mbgl::Value Let::serialize() const {
-    static const std::string letTag = "let";
     std::vector<mbgl::Value> serialized;
-    serialized.emplace_back(letTag);
+    serialized.emplace_back(getOperator());
     for (auto entry : bindings) {
         serialized.emplace_back(entry.first);
         serialized.emplace_back(entry.second->serialize());
@@ -108,8 +107,7 @@ ParseResult Var::parse(const Convertible& value_, ParsingContext& ctx) {
 }
 
 mbgl::Value Var::serialize() const {
-    static const std::string varTag = "var";
-    return std::vector<mbgl::Value>{{ varTag, name }};
+    return std::vector<mbgl::Value>{{ getOperator(), name }};
 }
 
 } // namespace expression

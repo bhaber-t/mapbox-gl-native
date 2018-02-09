@@ -45,7 +45,7 @@ public:
 
     mbgl::Value serialize() const override;
 
-    const char* getOperator() const override {
+    std::string getOperator() const override {
         return "literal";
     }
 private:

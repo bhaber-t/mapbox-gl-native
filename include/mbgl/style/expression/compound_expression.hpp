@@ -114,8 +114,8 @@ public:
         return false;
     }
     
-    const char* getOperator() const override {
-        return signature.name.c_str();
+    std::string getOperator() const override {
+        return signature.name;
     }
 
 private:
