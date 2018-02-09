@@ -49,9 +49,7 @@ public:
         return {};
     }
 
-    std::string getOperator() const override {
-        return "error";
-    }
+    std::string getOperator() const override { return "error"; }
 private:
     std::string message;
 };
