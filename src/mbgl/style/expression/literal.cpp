@@ -103,15 +103,11 @@ ParseResult Literal::parse(const Convertible& value, ParsingContext& ctx) {
 }
 
 mbgl::Value Literal::serialize() const {
-//    if (getType().is<type::Array>()) {
-//        std::vector<mbgl::Value> result;
-//        static const std::string literalTag = "literal";
-//        result.emplace_back(literalTag);
-//        result.emplace_back(serialized ? *serialized : *fromExpressionValue<mbgl::Value>(value));
-//        return result;
-//    } else {
-        return serialized ? *serialized : *fromExpressionValue<mbgl::Value>(value);
-    //}
+    if (getType().is<type::Array>() || getType().is<type::ObjectType>()) {
+        return std::vector<mbgl::Value>{{ getOperator(), *fromExpressionValue<mbgl::Value>(value) }};
+    } else {
+        return *fromExpressionValue<mbgl::Value>(value);
+    }
 }
 
 } // namespace expression

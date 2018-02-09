@@ -12,16 +12,14 @@ namespace expression {
 
 class Literal : public Expression {
 public:
-    Literal(Value value_, optional<mbgl::Value> serialized_ = optional<mbgl::Value>())
+    Literal(Value value_)
         : Expression(typeOf(value_))
         , value(value_)
-        , serialized(std::move(serialized_))
     {}
     
-    Literal(type::Array type_, std::vector<Value> value_, optional<mbgl::Value> serialized_ = optional<mbgl::Value>())
+    Literal(type::Array type_, std::vector<Value> value_)
         : Expression(type_)
         , value(value_)
-        , serialized(std::move(serialized_))
     {}
 
     EvaluationResult evaluate(const EvaluationContext&) const override {
@@ -44,13 +42,9 @@ public:
     }
 
     mbgl::Value serialize() const override;
-
-    std::string getOperator() const override {
-        return "literal";
-    }
+    std::string getOperator() const override { return "literal"; }
 private:
     Value value;
-    optional<mbgl::Value> serialized;
 };
 
 } // namespace expression
