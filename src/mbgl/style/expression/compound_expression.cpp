@@ -42,11 +42,11 @@ template <class R, class... Params>
 struct Signature<R (Params...)> : SignatureBase {
     using Args = std::array<std::unique_ptr<Expression>, sizeof...(Params)>;
     
-    Signature(R (*evaluate_)(Params...), const std::string& name) :
+    Signature(R (*evaluate_)(Params...), const std::string& name_) :
         SignatureBase(
             valueTypeToExpressionType<std::decay_t<typename R::Value>>(),
             std::vector<type::Type> {valueTypeToExpressionType<std::decay_t<Params>>()...},
-            name
+            name_
         ),
         evaluate(evaluate_)    {}
     
@@ -79,11 +79,11 @@ template <class R, typename T>
 struct Signature<R (const Varargs<T>&)> : SignatureBase {
     using Args = std::vector<std::unique_ptr<Expression>>;
     
-    Signature(R (*evaluate_)(const Varargs<T>&), const std::string& name) :
+    Signature(R (*evaluate_)(const Varargs<T>&), const std::string& name_) :
         SignatureBase(
             valueTypeToExpressionType<std::decay_t<typename R::Value>>(),
             VarargsType { valueTypeToExpressionType<T>() },
-            name
+            name_
         ),
         evaluate(evaluate_)
     {}
@@ -114,11 +114,11 @@ template <class R, class... Params>
 struct Signature<R (const EvaluationContext&, Params...)> : SignatureBase {
     using Args = std::array<std::unique_ptr<Expression>, sizeof...(Params)>;
     
-    Signature(R (*evaluate_)(const EvaluationContext&, Params...), const std::string& name) :
+    Signature(R (*evaluate_)(const EvaluationContext&, Params...), const std::string& name_) :
         SignatureBase(
             valueTypeToExpressionType<std::decay_t<typename R::Value>>(),
             std::vector<type::Type> {valueTypeToExpressionType<std::decay_t<Params>>()...},
-            name
+            name_
         ),
         evaluate(evaluate_)
     {}
