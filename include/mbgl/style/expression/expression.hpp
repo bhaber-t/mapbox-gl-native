@@ -138,9 +138,9 @@ public:
     
     virtual mbgl::Value serialize() const {
         std::vector<mbgl::Value> serialized;
-        serialized.push_back(std::string(getOperator()));
+        serialized.emplace_back(std::string(getOperator()));
         eachChild([&](const Expression &child) {
-            serialized.push_back(child.serialize());
+            serialized.emplace_back(child.serialize());
         });
         return serialized;
     };

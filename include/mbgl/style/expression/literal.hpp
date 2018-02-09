@@ -15,13 +15,13 @@ public:
     Literal(Value value_, optional<mbgl::Value> serialized_ = optional<mbgl::Value>())
         : Expression(typeOf(value_))
         , value(value_)
-        , serialized(serialized_)
+        , serialized(std::move(serialized_))
     {}
     
     Literal(type::Array type_, std::vector<Value> value_, optional<mbgl::Value> serialized_ = optional<mbgl::Value>())
         : Expression(type_)
         , value(value_)
-        , serialized(serialized_)
+        , serialized(std::move(serialized_))
     {}
 
     EvaluationResult evaluate(const EvaluationContext&) const override {
@@ -43,7 +43,7 @@ public:
         return {{ value }};
     }
 
-    virtual mbgl::Value serialize() const override;
+    mbgl::Value serialize() const override;
 
     const char* getOperator() const override {
         return "literal";
