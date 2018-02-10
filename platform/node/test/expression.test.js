@@ -41,16 +41,12 @@ suite.run('native', {ignores: ignores, tests: tests}, (fixture) => {
     const spec = fixture.propertySpec || {};
     const expression = mbgl.Expression.parse(fixture.expression, getExpectedType(spec));
 
-    console.log("input: " + JSON.stringify(fixture.expression));
-
     const evaluateExpression = (expression, compilationResult) => {
         if (expression instanceof mbgl.Expression) {
             compilationResult.result = 'success';
             compilationResult.isFeatureConstant = expression.isFeatureConstant();
             compilationResult.isZoomConstant = expression.isZoomConstant();
             compilationResult.type = expression.getType();
-
-            console.log("output: " + JSON.stringify(expression.serialize()));
 
             const evaluate = fixture.inputs || [];
             const evaluateResults = [];
