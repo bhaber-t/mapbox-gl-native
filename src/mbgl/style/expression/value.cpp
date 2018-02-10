@@ -105,8 +105,14 @@ Value ValueConverter<mbgl::Value>::toExpressionValue(const mbgl::Value& value) {
 
 mbgl::Value ValueConverter<mbgl::Value>::fromExpressionValue(const Value& value) {
     return value.match(
-        [&](const Color& c)->mbgl::Value {
-            return std::vector<mbgl::Value>{double(c.r), double(c.g), double(c.b), double(c.a)};
+        [&](const Color& color)->mbgl::Value {
+            return std::vector<mbgl::Value>{
+                std::string("rgba"),
+                double(255 * color.r / color.a),
+                double(255 * color.g / color.a),
+                double(255 * color.b / color.a),
+                double(color.a)
+            };
         },
         [&](const std::vector<Value>& values)->mbgl::Value {
             std::vector<mbgl::Value> converted;
